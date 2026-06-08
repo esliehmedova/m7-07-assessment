@@ -1,0 +1,13 @@
+{
+  "user_id": "user_123",
+  "recommendations": [
+    {
+      "product_id": "prod_001",
+      "score": 0.92
+    },
+    {
+      "product_id": "prod_042",
+      "score": 0.88
+    }
+  ]
+}

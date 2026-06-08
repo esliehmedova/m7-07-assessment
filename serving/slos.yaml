@@ -1,0 +1,24 @@
+service: recommendation-api
+
+slos:
+  availability:
+    target: 99.9%
+    window: 30d
+
+  latency:
+    metric: p95_latency
+    target: 120ms
+    window: 5m
+
+  error_rate:
+    target: 0.1%
+    window: 5m
+
+alerts:
+  - name: HighLatency
+    condition: p95_latency > 150ms
+    window: 10m
+
+  - name: HighErrorRate
+    condition: error_rate > 1%
+    window: 5m

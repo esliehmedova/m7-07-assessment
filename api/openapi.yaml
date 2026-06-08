@@ -1,0 +1,106 @@
+openapi: 3.1.0
+info:
+  title: Recommendation Service API
+  version: 1.0.0
+  description: API for real-time and batch product recommendations
+
+servers:
+  - url: https://api.recommendations.local
+
+paths:
+
+  /recommend:
+    post:
+      summary: Get real-time recommendations
+      description: Returns top-N personalized product recommendations
+      parameters:
+        - in: header
+          name: X-Model-Version
+          required: false
+          schema:
+            type: string
+          description: Model version for A/B testing and observability
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - user_id
+              properties:
+                user_id:
+                  type: string
+                context:
+                  type: object
+                  properties:
+                    device:
+                      type: string
+                    locale:
+                      type: string
+
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_id:
+                    type: string
+                  recommendations:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        product_id:
+                          type: string
+                        score:
+                          type: number
+        "400":
+          description: Bad request
+        "500":
+          description: Internal server error
+
+  /batch-recommend:
+    post:
+      summary: Batch recommendation scoring
+      description: Runs recommendations for multiple users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - user_ids
+              properties:
+                user_ids:
+                  type: array
+                  items:
+                    type: string
+
+      responses:
+        "200":
+          description: Batch results returned
+        "500":
+          description: Server error
+
+  /health:
+    get:
+      summary: Health check endpoint
+      responses:
+        "200":
+          description: Service is healthy
+
+components:
+  schemas:
+    Recommendation:
+      type: object
+      properties:
+        product_id:
+          type: string
+        score:
+          type: number

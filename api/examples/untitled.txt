@@ -1,0 +1,7 @@
+{
+  "user_id": "user_123",
+  "context": {
+    "device": "ios",
+    "locale": "az-AZ"
+  }
+}

@@ -1,0 +1,40 @@
+groups:
+  - name: recommendation-service-alerts
+
+    rules:
+
+      - alert: HighLatencyP95
+        expr: p95_latency > 150
+        for: 10m
+        labels:
+          severity: critical
+        annotations:
+          summary: "p95 latency exceeded 150ms"
+          description: "System is violating SLO (120ms target)"
+
+      - alert: HighErrorRate
+        expr: error_rate > 0.01
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "High error rate detected"
+          description: "Error rate exceeded 1% threshold"
+
+      - alert: LowTrafficAnomaly
+        expr: request_rate < 200
+        for: 15m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Traffic drop detected"
+          description: "Possible upstream outage or routing issue"
+
+      - alert: ModelVersionMismatch
+        expr: increase(model_version_mismatch_total[5m]) > 0
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Model version mismatch detected"
+          description: "Requests are hitting wrong model version"

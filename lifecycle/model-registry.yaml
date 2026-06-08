@@ -1,0 +1,38 @@
+model_name: recommendation-ranker
+
+versioning:
+  scheme: mlflow
+
+artifacts:
+  storage: s3-compatible-object-store
+  format: pickle
+
+metadata:
+  required_fields:
+    - training_data_version
+    - feature_set_version
+    - metrics:
+        - ndcg@10
+        - precision@10
+        - latency_p95
+
+environments:
+  dev:
+    approval: none
+
+  staging:
+    approval: ml-engineer
+
+  production:
+    approval:
+      - ml-engineer
+      - product-owner
+
+promotion_policy:
+  strategy: canary
+  traffic_split: [90, 10]
+
+rollback_policy:
+  trigger_conditions:
+    - metric_drop: ctr > 5%
+    - latency_p95 > 150ms
